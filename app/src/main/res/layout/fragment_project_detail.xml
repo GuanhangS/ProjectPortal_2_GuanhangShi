@@ -1,0 +1,113 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="edu.bu.projectportal.ProjectDetailFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/projTitleTextViewId"
+        android:text="Project Title"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/projSummaryTextViewId"
+        android:layout_width="match_parent"
+        android:layout_height="244dp"
+        android:text="This is the detail of the project" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/messageEditBtrId"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Edit" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="28dp" />
+
+    <TextView
+        android:id="@+id/proKeywordTextViewId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="keywords" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="28dp" />
+
+    <TextView
+        android:id="@+id/proLinkTextViewID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="porject Link" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="28dp" />
+
+    <TextView
+        android:id="@+id/proAuthorNameTextViewId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AuthorName" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="74dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="29dp"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="is this your favourite project？" />
+
+        <Switch
+            android:id="@+id/isFavouriteSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:showText="true"
+            android:textOff="no"
+            android:textOn="yes" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:onClick="deleteProject"
+        android:text="Delete the Project" />
+
+
+
+</LinearLayout>
+
+
