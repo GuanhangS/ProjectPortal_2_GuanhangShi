@@ -12,7 +12,7 @@ Able to edit text message after click on the Edit button in every project detail
 
 Included ProjectMessageEditActivity and ProjectMessageEdit(Fragment) to implement edit function.
 
-Still have some UI error in the main page, after the checkbox is clicked, the page would not shows properly.
+Had some UI error in the main page, after the checkbox is clicked, the page would not shows properly, then find the problem that the code write in the onCreateView() will only run once while the page is created, so update the page in the other place is a better way.
 
 
 
