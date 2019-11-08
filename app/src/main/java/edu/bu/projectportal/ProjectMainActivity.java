@@ -18,8 +18,6 @@ import android.widget.Toast;
  */
 
 public class ProjectMainActivity extends AppCompatActivity implements ProjectListAdapter.Listener {
-    CheckBox checkbox;
-    private Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -28,31 +26,7 @@ public class ProjectMainActivity extends AppCompatActivity implements ProjectLis
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        checkbox = (CheckBox)findViewById(R.id.isFavouriteCheckBox);
-        context = this;
-        checkbox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                    ProjectsListFragment projectsListFragment = new ProjectsListFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("data",isChecked);
-                    projectsListFragment.setArguments(bundle);
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.ListFragment,projectsListFragment);
-                    fragmentTransaction.commit();
-
-
-
-//                    Toast.makeText(context, "hello", Toast.LENGTH_SHORT).show();
-
-//                    ProjectsListFragment projectsListFragment = (ProjectsListFragment)getSupportFragmentManager().findFragmentById(R.id.ListFragment);
-//                    projectsListFragment.update(isChecked);
-
-            }
-
-        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

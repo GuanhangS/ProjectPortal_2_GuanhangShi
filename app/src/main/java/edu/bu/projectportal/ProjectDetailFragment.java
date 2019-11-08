@@ -76,8 +76,6 @@ public class ProjectDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        int ID = this.projectId;
-        super.onActivityCreated(savedInstanceState);
         switchComponent  = (Switch)getActivity().findViewById(R.id.isFavouriteSwitch);
         ProjectDao projectDao = ProjectDao.getInstance(getContext());
         Project project = projectDao.getProjectById(projectId );

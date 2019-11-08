@@ -1,6 +1,7 @@
 package edu.bu.projectportal;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,8 +14,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.List;
@@ -28,17 +31,33 @@ import edu.bu.projectportal.database.ProjectPortalDBHelper;
  */
 public class ProjectsListFragment extends Fragment {
     ProjectListAdapter.Listener listener;
-    boolean isFavourite;
-
+    private ProjectDao projectDao;
+    private ProjectListAdapter projectListAdapter;
+    private RecyclerView projectsListRecyclerView;
+    private List<Project> projects;
+    private CheckBox checkbox;
 
 
     public ProjectsListFragment() {
         // Required empty public constructor
     }
 
-    public void update(boolean isFavourite){
-        this.isFavourite = isFavourite;
-    }
+//    public void update(boolean isFavourite){
+//        this.isFavourite = isFavourite;
+//        ProjectDao projectDao = ProjectDao.getInstance(getContext());
+//        projectDao.openDb();
+//
+//        if(isFavourite){
+//            projects = projectDao.getFavouriteProject();
+//
+//        }else{
+//            projects = projectDao.getAllProject();
+//
+//        }
+//         projectListAdapter.notifyDataSetChanged();
+//
+//
+//    }
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,45 +65,76 @@ public class ProjectsListFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_projects_list, container, false);
 
-        RecyclerView projectsListRecyclerView = (RecyclerView)
+        projectsListRecyclerView = (RecyclerView)
                 (v.findViewById(R.id.projectlist_recyclerview));
 
 
         Bundle bundle = this.getArguments();
 
-        if(this.getArguments() != null){
-//            Toast.makeText(getActivity(), "Got the data", Toast.LENGTH_SHORT).show();
-             isFavourite = bundle.getBoolean("data");
+//
 
-        }
 
-        ProjectDao projectDao = ProjectDao.getInstance(getContext());
+        projectDao = ProjectDao.getInstance(getContext());
         projectDao.openDb();
-        List<Project> projects;
-        ProjectListAdapter projectListAdapter;
 
 
-        if(isFavourite){
-            projects = projectDao.getFavouriteProject();
-            projectListAdapter = new ProjectListAdapter(projects);
-        }else{
-            projects = projectDao.getAllProject();
-            projectListAdapter = new ProjectListAdapter(projects);
-        }
+        projects = projectDao.getAllProject();
 
 
+
+
+//        if(isFavourite){
+//            projects = projectDao.getFavouriteProject();
+//            projectListAdapter = new ProjectListAdapter(projects);
+//        }else{
+//            projects = projectDao.getAllProject();
+//            projectListAdapter = new ProjectListAdapter(projects);
+//        }
+
+
+
+        projectListAdapter = new ProjectListAdapter(projects);
         projectsListRecyclerView.setAdapter(projectListAdapter);
         projectListAdapter.setListener((ProjectListAdapter.Listener)getActivity());
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         projectsListRecyclerView.setLayoutManager(mLayoutManager);
-        projectListAdapter.notifyDataSetChanged();
+//        projectDao.closeDB();
 
 
 
         return v;
     }
 
+    @Override
+    public void onActivityCreated(Bundle saveInstanceState){
+        super.onActivityCreated(saveInstanceState);
+        projectDao.openDb();
+        checkbox = (CheckBox)getActivity().findViewById(R.id.isFavouriteCheckBox);
+
+        checkbox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ProjectDao projectDaoChange = ProjectDao.getInstance(getContext());
+                projectDaoChange.openDb();
+
+                if(isChecked){
+                    projects = projectDaoChange.getFavouriteProject();
+//                    projectListAdapter.notifyDataSetChanged();
+                }else{
+                    projects = projectDaoChange.getAllProject();
+//                    projectListAdapter.notifyDataSetChanged();
+                }
+//                projectDao.closeDB();
+                projectListAdapter = new ProjectListAdapter(projects);
+                projectsListRecyclerView.setAdapter(projectListAdapter);
+                projectListAdapter.setListener((ProjectListAdapter.Listener)getActivity());
+
+                LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+                projectsListRecyclerView.setLayoutManager(mLayoutManager);
+            }
+        });
+    }
 
 }
 
