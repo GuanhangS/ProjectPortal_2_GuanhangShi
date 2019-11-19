@@ -1,9 +1,13 @@
 package edu.bu.projectportal;
 
+import android.app.IntentService;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import edu.bu.projectportal.database.ProjectDao;
 import edu.bu.projectportal.database.ProjectPortalDBHelper;
 
@@ -24,9 +30,12 @@ import edu.bu.projectportal.database.ProjectPortalDBHelper;
 public class ProjectDetailFragment extends Fragment {
 
     int projectId, nextProjectId;
-    TextView titleTextView, summaryTextView, authorNameTextView, keywordsTextView, linkTextView;
-    Switch switchComponent;
-    Button btn;
+    private TextView titleTextView, summaryTextView, authorNameTextView, keywordsTextView, linkTextView;
+    private Switch switchComponent;
+    private Button btn;
+    private boolean isChecked;
+    private ProjectDao projectDaoLike;
+    private Project projectLike;
     public ProjectDetailFragment() {
         // Required empty public constructor
     }
@@ -50,6 +59,8 @@ public class ProjectDetailFragment extends Fragment {
             nextProjectId = getArguments().getInt("NextProjectid");
         }
 
+
+
         Log.d("projectid", " " + projectId);
         setProject(projectId);
 
@@ -64,7 +75,7 @@ public class ProjectDetailFragment extends Fragment {
 
         projectId = projId;
         ProjectDao projectDao = ProjectDao.getInstance(getContext());
-        Project project = projectDao.getProjectById(projectId );
+        Project project = projectDao.getProjectById(projectId);
 
         titleTextView.setText(project.getId() + ": " + project.getTitle());
         summaryTextView.setText(project.getSummary());
@@ -88,20 +99,8 @@ public class ProjectDetailFragment extends Fragment {
         switchComponent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked){
-                    Toast.makeText(getActivity(), "You like it.", Toast.LENGTH_SHORT).show();
-                    ProjectDao projectDaoLike = ProjectDao.getInstance(getContext());
-                    Project projectLike = projectDaoLike.getProjectById(projectId);
-                    projectLike.setFavourite(1);
-                    projectDaoLike.updateProjectById(projectLike,projectId);
 
-                }else{
-                    Toast.makeText(getActivity(), "You don't like it.", Toast.LENGTH_SHORT).show();
-                    ProjectDao projectDaoLike = ProjectDao.getInstance(getContext());
-                    Project projectLike = projectDaoLike.getProjectById(projectId);
-                    projectLike.setFavourite(0);
-                    projectDaoLike.updateProjectById(projectLike,projectId);
-                }
+                (new DatabaseFavouriteUpdateAsyncTask()).execute();
             }
         });
 
@@ -120,6 +119,35 @@ public class ProjectDetailFragment extends Fragment {
         });
     }
 
+    private void btnUpdate(){
+        isChecked = switchComponent.isChecked();
+    }
+
+    private class DatabaseFavouriteUpdateAsyncTask extends AsyncTask<Boolean, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Boolean...Booleans) {
+            btnUpdate();
+            projectDaoLike = ProjectDao.getInstance(getContext());
+            projectLike = projectDaoLike.getProjectById(projectId);
+
+            return isChecked;
+        }
+
+        protected void onPostExecute(Boolean isChecked) {
+
+            if(isChecked){
+                Toast.makeText(getActivity(), "You like it.", Toast.LENGTH_SHORT).show();
+                projectLike.setFavourite(1);
+                projectDaoLike.updateProjectById(projectLike,projectId);
+            }else{
+                Toast.makeText(getActivity(), "You don't like it.", Toast.LENGTH_SHORT).show();
+                projectLike.setFavourite(0);
+                projectDaoLike.updateProjectById(projectLike,projectId);
+            }
+        }
+    }
+
 
     public int getProjectId(){
         return projectId;
@@ -129,6 +157,8 @@ public class ProjectDetailFragment extends Fragment {
     public int getNextProjectId() {
         return nextProjectId;
     }
+
+
 
 
 }

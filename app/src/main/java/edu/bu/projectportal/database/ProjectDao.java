@@ -152,6 +152,8 @@ public class ProjectDao {
 
         cursor.moveToFirst();
 
+        int ProjectId = cursor.getInt(cursor.getColumnIndex(
+                ProjectPortalDBContract.ProjectContract.COLUMN_PROJECT_ID));
         String projectTitle = cursor.getString(cursor.getColumnIndex(
                 ProjectPortalDBContract.ProjectContract.COLUMN_PROJECT_Title));
         String projectSum = cursor.getString(cursor.getColumnIndex(
@@ -166,7 +168,7 @@ public class ProjectDao {
                 ProjectPortalDBContract.ProjectContract.COLUMN_PROJECT_IsFavourite));
 
 
-        Project project = new Project(projectId, projectTitle,projectSum, projectAuthorName, projectKeywords, projectLink,projectIsFavourite);
+        Project project = new Project(ProjectId, projectTitle,projectSum, projectAuthorName, projectKeywords, projectLink,projectIsFavourite);
         cursor.close();
 
         return project;
