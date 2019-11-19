@@ -32,6 +32,9 @@ public class ProjectMessageEditActivity extends AppCompatActivity {
 
         Button button = (Button)findViewById(R.id.MessageSubimitButton);
         editText =(EditText)findViewById(R.id.messageditText);
+        ProjectDao projectDao = ProjectDao.getInstance(getApplicationContext());
+        Project project = projectDao.getProjectById(projectId);
+        editText.setText(project.getSummary());
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
